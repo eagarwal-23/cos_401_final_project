@@ -1,1 +1,1 @@
-Final project repository for COS 401 (Spring 2023).
+# COS 401 Final Project: Translating French Poetry
