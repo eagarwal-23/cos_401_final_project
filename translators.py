@@ -1,3 +1,4 @@
+import config
 import googletrans
 import deepl
 import openai
@@ -96,12 +97,12 @@ def translate_poem_google(poem, lang='en'):
 
 def translate_poem_deepl(poem, lang='EN-GB'):
     # translate poem from French to English
-    translator = deepl.Translator('0c9c56f4-ef9d-0179-33a1-c1dde6e7ec9a:fx') 
+    translator = deepl.Translator(config.api_key_deepl) 
     poem_en = translator.translate_text(poem, target_lang=lang) 
     return poem_en.text
 
 def translate_poem_openai(poem, lang = 'English'):
-    openai.api_key = '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'
+    openai.api_key = config.api_key_deepl
     response = openai.Completion.create(
     engine="text-davinci-002",
     prompt="Translate the following poem into, " + lang + ":\n" + poem + "\n.",
