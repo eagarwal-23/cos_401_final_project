@@ -16,6 +16,10 @@ def main():
     print("Poem translated by DeepL:\n", translate_poem_deepl(poem_fr), "\n")
     print("Poem translated by OpenAI:\n", translate_poem_openai(poem_fr), "\n")
 
+def generate_translations(poem_fr, poem_en):
+    # generate translations of poem from French to English
+    return [translate_poem_google(poem_fr), translate_poem_deepl(poem_fr), translate_poem_openai(poem_fr), poem_en]
+
 def translate_poem_google(poem, lang='en'):
     # translate poem from French to English with Google Translate API
     translator = googletrans.Translator()
