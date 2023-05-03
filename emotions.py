@@ -9,8 +9,9 @@ import Poem_Emotions
 import sys
 
 # constants
-nlp_en = spacy.load('en_core_web_lg')
-nlp_fr = spacy.load('fr_core_news_lg')
+nlp_en = spacy.load("en_core_web_trf")
+nlp_fr = spacy.load("fr_dep_news_trf")
+
 emotions = ['joy', 'fear', 'sadness', 'anger', 'surprise', 'disgust']
 punctuation = string.punctuation
 
