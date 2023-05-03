@@ -92,7 +92,6 @@ def fr_poem_emotions(poem_fr, cleaned_poem_fr, feel_df):
     emotions_dict = {}
     poem_polarity = 0
     for token in cleaned_poem_fr:
-        print(token)
         token = token.lower()
         if token in feel_df['word'].values:
             token_row = (feel_df[feel_df['word'] == token])
@@ -116,6 +115,7 @@ def fr_poem_emotions(poem_fr, cleaned_poem_fr, feel_df):
     poem_emotions = Poem_Emotions.Poem_Emotions('FR', poem_fr, poem_polarity, poem_emotions_vector, emotions_dict)
     return poem_emotions
 
+# TODO: lemmatize
 def en_preprocess_emotions_df(nrc_df):
     # adding column names
     nrc_df.columns = ['word', 'emotion', 'association']
@@ -129,11 +129,11 @@ def en_preprocess_emotions_df(nrc_df):
     polarities = [1, -1]
     nrc_df['polarity'] = np.select(conditions, polarities)
     nrc_df = nrc_df.drop(['positive', 'negative',], axis = 1)
+    nrc_df.dropna(inplace = True)
+    nrc_df['word'] = nrc_df['word'].apply(lambda x: nlp_en(x)[0].lemma_)
 
     # drop columns not in french lexicon
     nrc_df = nrc_df.drop(['anticipation', 'trust',], axis = 1)
-
-    nrc_df.dropna(inplace = True)
 
     return nrc_df
 
