@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pardon My French: A French to English Poem Translator</title>
+	<style>
+    {
+        box-sizing: border-box;
+    }
+    /* Set additional styling options for the columns*/
+    .column {
+    float: left;
+    width: 33%;
+    }
+
+    .row:after {
+    content: "";
+    display: table;
+    clear: both;
+    }
+    </style>
+</head>
+<body>
+	 <!-- title of page -->
+	<h1><center>Pardon My French: A French to English Poem Translator</center></h1>
+	<h3><center>with Semantic, Syntactic, and Emotional Similarity Scores</center></h3>
+	
+	<!-- poem entry box -->
+	<form action="/translate" method="post"><center>
+		<label for="poem">Enter your poem:</label><br>
+		<textarea id="poem" name="poem"></textarea><br>
+		<input type="submit" value="Translate and Score Translations">
+	</center></form>
+
+	<!-- print orignal poem  -->
+	<!-- <h2><center>Original Poem:</center></h2>
+	<p><center>{{ og_poem }}</center></p> -->
+
+	<!-- print poem translations -->
+	<h2>Poem Translations:</h2>
+
+	<div class="row">
+        <div class="column" style="background-color:#FFB695;">
+            <h2>Translation 1</h2>
+            <p>{{ translation[0] }}</p>
+            <p> </p>
+            <p><b>Semantic Score: </b> {{ semantic[0] }}</p>
+			<p><b>Syntactic Score: </b> {{ struct[0] }}</p>
+			<p><b>Emotional Score: </b> {{ emotion[0] }}</p>
+        </div>
+        <div class="column" style="background-color:#96D1CD;">
+            <h2>Translation 2</h2>
+            <p>{{ translation[1] }}</p>
+            <p> </p>
+            <p><b>Semantic Score: </b> {{ semantic[1] }}</p>
+			<p><b>Syntactic Score: </b> {{ struct[1] }}</p>
+			<p><b>Emotional Score: </b> {{ emotion[1] }}</p>
+        </div>
+        <div class="column" style="background-color:#96D1CD;">
+            <h2>Translation 3</h2>
+            <p>{{ translation[2] }}</p>
+            <p> </p>
+            <p><b>Semantic Score: </b> {{ semantic[2] }}</p>
+			<p><b>Syntactic Score: </b> {{ struct[2] }}</p>
+			<p><b>Emotional Score: </b> {{ emotion[2] }}</p>
+        </div>
+    </div>
+
+</body>
+</html>
