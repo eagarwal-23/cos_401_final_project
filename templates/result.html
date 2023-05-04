@@ -58,7 +58,7 @@
             </div>
             <div class="input-column" style="width: 35%;">
               <label for="human_trans">Enter your English translation:</label><br>
-              <textarea id="human_trans" name="human_trans" rows="15" cols="50">{{ human_trans }}</textarea><br>
+              <textarea id="human_trans" name="human_trans" rows="15" cols="50">{{ translation[0] }}</textarea><br>
             </div>
           </div>
           <div style="padding-bottom: 30px;"></div>
@@ -80,30 +80,34 @@
                 <p><b>Semantic Score: </b> {{ semantic[0] }}</p>
     			<p><b>Syntactic Score: </b> {{ struct[0] }}</p>
     			<p><b>Emotional Score: </b> {{ emotion[0] }}</p>
+                <p><b>Lexical Score: </b> {{ lexical[1] }}</p>
             </div>
             <div class="result-column" style="background-color:#96D1CD;">
-                <h2>DeepL Translation</h2>
+                <h2>Google Translation</h2>
                 <p>{{ translation[1] }}</p>
                 <p> </p>
                 <p><b>Semantic Score: </b> {{ semantic[1] }}</p>
     			<p><b>Syntactic Score: </b> {{ struct[1] }}</p>
     			<p><b>Emotional Score: </b> {{ emotion[1] }}</p>
+                <p><b>Lexical Score: </b> {{ lexical[1] }}</p>
             </div>
             <div class="result-column" style="background-color:#96D1CD;">
-                <h2>OpenAI Translation</h2>
+                <h2>DeepL Translation</h2>
                 <p>{{ translation[2] }}</p>
                 <p> </p>
                 <p><b>Semantic Score: </b> {{ semantic[2] }}</p>
     			<p><b>Syntactic Score: </b> {{ struct[2] }}</p>
     			<p><b>Emotional Score: </b> {{ emotion[2] }}</p>
+                <p><b>Lexical Score: </b> {{ lexical[2] }}</p>
             </div>
             <div class="result-column" style="background-color:#FFB695;">
-                <h2>Google Translate Translation</h2>
-                <p>{{ translation[0] }}</p>
+                <h2>OpenAI Translation</h2>
+                <p>{{ translation[3] }}</p>
                 <p> </p>
-                <p><b>Semantic Score: </b> {{ semantic[0] }}</p>
-                <p><b>Syntactic Score: </b> {{ struct[0] }}</p>
-                <p><b>Emotional Score: </b> {{ emotion[0] }}</p>
+                <p><b>Semantic Score: </b> {{ semantic[3] }}</p>
+                <p><b>Syntactic Score: </b> {{ struct[3] }}</p>
+                <p><b>Emotional Score: </b> {{ emotion[3] }}</p>
+                <p><b>Lexical Score: </b> {{ lexical[3] }}</p>
             </div>
         </div>
     </center>
