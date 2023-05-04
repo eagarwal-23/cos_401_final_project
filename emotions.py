@@ -8,6 +8,8 @@ from nltk.tokenize import word_tokenize, MWETokenizer
 from nltk.tokenize import MWETokenizer
 import Poem_Emotions
 import sys
+
+
 # TODO: change punctuation removal to regex method
 # constants
 # nlp_en = spacy.load("en_core_web_trf")
@@ -98,9 +100,11 @@ def fr_poem_emotions(poem_fr, cleaned_poem_fr, feel_df):
     poem_emotions_vector = [0 for elem in range(len(emotions))]
     emotions_dict = {}
     poem_polarity = 0
+    num_words_counted = 0
     for token in cleaned_poem_fr:
         token = token.lower()
         if token in feel_df['word'].values:
+            num_words_counted += 1
             token_row = (feel_df[feel_df['word'] == token])
             for column in token_row:
                 if column == 'id' or column == 'word':
@@ -119,7 +123,7 @@ def fr_poem_emotions(poem_fr, cleaned_poem_fr, feel_df):
                             emotions_dict[column] += 1
                         else:
                             emotions_dict[column] = 1
-    poem_emotions = Poem_Emotions.Poem_Emotions('FR', poem_fr, poem_polarity/len(cleaned_poem_fr), poem_emotions_vector, emotions_dict)
+    poem_emotions = Poem_Emotions.Poem_Emotions('FR', poem_fr, poem_polarity/num_words_counted, poem_emotions_vector, emotions_dict)
     return poem_emotions
 
 # TODO: lemmatize
@@ -164,10 +168,11 @@ def en_poem_emotions(poem_en, cleaned_poem_en, nrc_df):
     poem_emotions_vector = [0 for elem in range(len(emotions))]
     emotions_dict = {}
     poem_polarity = 0
-
+    num_words_counted = 0
     for token in cleaned_poem_en:
         token = token.lower()
         if token in nrc_df['word'].values:
+            num_words_counted += 1
             token_row = (nrc_df[nrc_df['word'] == token])
             for column in token_row:
                 if column == 'word':
@@ -187,7 +192,7 @@ def en_poem_emotions(poem_en, cleaned_poem_en, nrc_df):
                         else:
                             emotions_dict[column] = 1
     
-    poem_emotions = Poem_Emotions.Poem_Emotions('EN', poem_en, poem_polarity/len(cleaned_poem_en), poem_emotions_vector, emotions_dict)
+    poem_emotions = Poem_Emotions.Poem_Emotions('EN', poem_en, poem_polarity/num_words_counted, poem_emotions_vector, emotions_dict)
     return poem_emotions
 
 if __name__ == '__main__':

@@ -1,3 +1,4 @@
+from scipy import spatial
 class Poem_Emotions():
 
     def __init__(self, lang, poem, polarity, emotions_vector, emotions_dict):
@@ -30,4 +31,4 @@ class Poem_Emotions():
         return dict(sorted(self.emotions_normalized().items(), key=lambda item: item[1], reverse=True))
     
     def calc_dist(self, emotions_other):
-        return sum((p-q)**2 for p, q in zip(self.emotions_vector, emotions_other.emotions_vector)) ** 0.5
+        return (1 - spatial.distance.cosine(self.emotions_vector, emotions_other.emotions_vector))
