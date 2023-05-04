@@ -12,9 +12,9 @@ def main():
 
     print("Original poem:\n", poem_fr, "\n")
     print("Poem translated by a human:\n", poem_en, "\n")
-    print("Poem translated by Google Translate:\n", translate_poem_google(poem_fr), "\n")
-    print("Poem translated by DeepL:\n", translate_poem_deepl(poem_fr), "\n")
-    print("Poem translated by OpenAI:\n", translate_poem_openai(poem_fr), "\n")
+    print("Poem translated by Google Translate:\n", translate_poem_google("homme"), "\n")
+    print("Poem translated by DeepL:\n", translate_poem_deepl("homme"), "\n")
+    print("Poem translated by OpenAI:\n", translate_poem_openai("homme"), "\n")
 
 def generate_translations(poem_fr, poem_en):
     # generate translations of poem from French to English
@@ -37,7 +37,7 @@ def translate_poem_openai(poem, lang = 'English'):
     openai.api_key = config.api_key_openai
     response = openai.Completion.create(
     engine="text-davinci-002",
-    prompt="Translate the following poem into, " + lang + ":\n" + poem + "\n.",
+    prompt="Translate the following french poem into, " + lang + ":\n" + poem + "\n.",
     temperature=0.5,
     max_tokens=1024,
     top_p=1,
