@@ -22,24 +22,26 @@ def translate():
     # translation function
     [google_trans, deepl_trans, openai_trans, human_trans] = generate_translations(og_poem, human_trans)
     trans_poem = [human_trans, google_trans, deepl_trans, openai_trans]
+    for i in range(4):
+        trans_poem[i] = trans_poem[i].replace("\n", "<br>")
 
     # semantic score for each translation
     semantic = [0,0,0,0]
-    for i in range(4):
-        semantic[i] = round(calculate_semantic_similarity(og_poem, trans_poem[i]), 5)
+    # for i in range(4):
+    #     semantic[i] = round(calculate_semantic_similarity(og_poem, trans_poem[i]), 5)
 
     # structural score for each translation
     struct = [1,1,1,1]
 
     # emotional score for each translation
     emotion = [0,0,0,0]
-    for i in range(4):
-        emo = calc_emotional_similarity(og_poem, trans_poem[i])
-        emotion[i] = round(emo[0], 5)
+    # for i in range(4):
+    #     emo = calc_emotional_similarity(og_poem, trans_poem[i])
+    #     emotion[i] = round(emo[0], 5)
 
     lexical = [0,0,0,0]
 
-    return render_template('result.html', og_poem = og_poem, translation=trans_poem, semantic = semantic, struct = struct, emotion = emotion, lexical = lexical)
+    return render_template('result.html', og_poem = og_poem, human_trans = human_trans, translation=trans_poem, semantic = semantic, struct = struct, emotion = emotion, lexical = lexical)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -44,9 +44,12 @@
     <p style="padding-left: 300px; padding-right: 300px; text-align:center"> 
         This French to English poem translator takes in a French poem and your English translation of the poem, translates the French poem into English using DeepL, OpenAI, and Google Translate, and calculates the semantic, syntactic, and emotional similarity between the French poem and all four of these translations. 
     </p>
+    <p style="padding-left: 300px; padding-right: 300px; text-align:center"> 
+        Note that similarity calculations may take a few minutes.
+    </p>
 
 
-    <div style="padding-bottom: 10px;"></div>
+    <div style="padding-bottom: 30px;"></div>
 
     <!-- enter poems blocks -->
     <center>
@@ -58,10 +61,10 @@
             </div>
             <div class="input-column" style="width: 35%;">
               <label for="human_trans">Enter your English translation:</label><br>
-              <textarea id="human_trans" name="human_trans" rows="15" cols="50">{{ translation[0] }}</textarea><br>
+              <textarea id="human_trans" name="human_trans" rows="15" cols="50">{{ human_trans }}</textarea><br>
             </div>
           </div>
-          <div style="padding-bottom: 30px;"></div>
+          <div style="padding-bottom: 20px;"></div>
           <div style="text-align:center">
             <button type="submit">Score Translations</button>
           </div>
@@ -73,44 +76,138 @@
 	<!-- print poem translations -->
 	<center>
         <div class="result-row">
+
+            <!-- 1. human translation -->
             <div class="result-column" style="background-color:#FFB695;">
                 <h2>Human Translation</h2>
-                <p>{{ translation[0] }}</p>
-                <p> </p>
-                <p><b>Semantic Score: </b> {{ semantic[0] }}</p>
-    			<p><b>Syntactic Score: </b> {{ struct[0] }}</p>
-    			<p><b>Emotional Score: </b> {{ emotion[0] }}</p>
-                <p><b>Lexical Score: </b> {{ lexical[1] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:center">{{ translation[0]|safe }}</p>
+                <br>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Semantic Score: </b> {{ semantic[0] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Syntactic Score: </b> {{ struct[0] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Emotional Score: </b> {{ emotion[0] }}</p>
+                <div style="float: left; padding-left: 30px">
+                                <button onclick="toggleContent1()">Learn more...</button>
+                             </div><br>
+                <div id="content1" style="display: none; padding-left: 30px; text-align:left">
+                    <p>This is the content that can be expanded and collapsed.</p>
+                </div>
+                <script>
+                    function toggleContent1() {
+                        var content = document.getElementById("content1");
+                        if (content.style.display === "none") {
+                            content.style.display = "block";
+                        } else {
+                            content.style.display = "none";
+                        }
+                    }
+                </script>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Lexical Score: </b> {{ lexical[0] }}</p>
             </div>
-            <div class="result-column" style="background-color:#96D1CD;">
-                <h2>Google Translation</h2>
-                <p>{{ translation[1] }}</p>
-                <p> </p>
-                <p><b>Semantic Score: </b> {{ semantic[1] }}</p>
-    			<p><b>Syntactic Score: </b> {{ struct[1] }}</p>
-    			<p><b>Emotional Score: </b> {{ emotion[1] }}</p>
-                <p><b>Lexical Score: </b> {{ lexical[1] }}</p>
+            
+            <!-- 2. google translate -->
+            <div class="result-column" style="background-color:#CAE3E8;">
+                <h2>Google Translate Translation</h2>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:center">{{ translation[1]|safe }}</p>
+                <br>
+                 <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Semantic Score: </b> {{ semantic[1] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Syntactic Score: </b> {{ struct[1] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Emotional Score: </b> {{ emotion[1] }}</p>
+                <div style="float: left; padding-left: 30px">
+                <button onclick="toggleContent2()">Learn more...</button>
+             </div>
+             <br>
+                <div id="content2" style="display: none; padding-left: 30px; text-align:left">
+                    <p>This is the content that can be expanded and collapsed.</p>
+                </div>
+                <script>
+                    function toggleContent2() {
+                        var content = document.getElementById("content2");
+                        if (content.style.display === "none") {
+                            content.style.display = "block";
+                        } else {
+                            content.style.display = "none";
+                        }
+                    }
+                </script>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Lexical Score: </b> {{ lexical[1] }}</p>
             </div>
+
+            <!-- 3. deepL -->
             <div class="result-column" style="background-color:#96D1CD;">
                 <h2>DeepL Translation</h2>
-                <p>{{ translation[2] }}</p>
-                <p> </p>
-                <p><b>Semantic Score: </b> {{ semantic[2] }}</p>
-    			<p><b>Syntactic Score: </b> {{ struct[2] }}</p>
-    			<p><b>Emotional Score: </b> {{ emotion[2] }}</p>
-                <p><b>Lexical Score: </b> {{ lexical[2] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:center">{{ translation[2]|safe }}</p>
+                <br>
+                 <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Semantic Score: </b> {{ semantic[2] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Syntactic Score: </b> {{ struct[2] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Emotional Score: </b> {{ emotion[2] }}</p>
+                <div style="float: left; padding-left: 30px">
+                <button onclick="toggleContent3()">Learn more...</button>
+             </div><br>
+            <div id="content3" style="display: none; padding-left: 30px; text-align:left">
+                <p>This is the content that can be expanded and collapsed.</p>
             </div>
-            <div class="result-column" style="background-color:#FFB695;">
+            <script>
+                function toggleContent3() {
+                    var content = document.getElementById("content3");
+                    if (content.style.display === "none") {
+                        content.style.display = "block";
+                    } else {
+                        content.style.display = "none";
+                    }
+                }
+            </script>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Lexical Score: </b> {{ lexical[2] }}</p>
+            </div>
+
+            <!-- 4. openAI -->
+            <div class="result-column" style="background-color:#CAE3E8;">
                 <h2>OpenAI Translation</h2>
-                <p>{{ translation[3] }}</p>
-                <p> </p>
-                <p><b>Semantic Score: </b> {{ semantic[3] }}</p>
-                <p><b>Syntactic Score: </b> {{ struct[3] }}</p>
-                <p><b>Emotional Score: </b> {{ emotion[3] }}</p>
-                <p><b>Lexical Score: </b> {{ lexical[3] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:center">{{ translation[3]|safe }}</p>
+                <br>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Semantic Score: </b> {{ semantic[3] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Syntactic Score: </b> {{ struct[3] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Emotional Score: </b> {{ emotion[3] }}</p>
+                <div style="float: left; padding-left: 30px">
+                <button onclick="toggleContent4()">Learn more...</button>
+             </div><br>
+                <div id="content4" style="display: none; padding-left: 30px; text-align:left">
+                    <p>This is the content that can be expanded and collapsed.</p>
+                </div>
+                <script>
+                    function toggleContent4() {
+                        var content = document.getElementById("content4");
+                        if (content.style.display === "none") {
+                            content.style.display = "block";
+                        } else {
+                            content.style.display = "none";
+                        }
+                    }
+                </script>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Lexical Score: </b> {{ lexical[3] }}</p>
             </div>
         </div>
     </center>
+
+    <script>
+        // get all the columns
+        var cols = document.getElementsByClassName("result-column");
+
+        // set the initial max height to 0
+        var maxHeight = 0;
+
+        // loop through the columns to find the tallest one
+        for (var i = 0; i < cols.length; i++) {
+          var colHeight = cols[i].offsetHeight;
+          if (colHeight > maxHeight) {
+            maxHeight = colHeight;
+          }
+        }
+
+        // set the height of all the columns to match the tallest one
+        for (var i = 0; i < cols.length; i++) {
+          cols[i].style.height = maxHeight + "px";
+        }
+    </script>
 
 </body>
 </html>
