@@ -118,7 +118,6 @@ def abstract_concrete_ratio_fr(poem):
         token = word.text
         if word.tag_ == 'NOUN':
             if len(wn.synsets(token,lang='fra')) != 0:
-
                 synset = lesk_fr(tokens, (translator.translate(token)).text, wn.synsets(token,lang='fra'))
                 if synset.lexname().startswith('noun.'):
                     if synset.lexname() in lexical_categories_abs:

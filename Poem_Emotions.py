@@ -22,6 +22,12 @@ class Poem_Emotions():
         for emotion, count in (self.emotions_dict).items():
             emotions_normalized[emotion] = count/num_emotions
         return emotions_normalized
+
+    def polarity(self):
+        return self.poem_polarity
+    
+    def emotions_ranked(self):
+        return dict(sorted(self.emotions_normalized().items(), key=lambda item: item[1]))
     
     def calc_dist(self, emotions_other):
         return sum((p-q)**2 for p, q in zip(self.emotions_vector, emotions_other.emotions_vector)) ** 0.5

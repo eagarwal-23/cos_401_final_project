@@ -12,9 +12,9 @@ def main():
 
     print("Original poem:\n", poem_fr, "\n")
     print("Poem translated by a human:\n", poem_en, "\n")
-    print("Poem translated by Google Translate:\n", translate_poem_google("homme"), "\n")
-    print("Poem translated by DeepL:\n", translate_poem_deepl("homme"), "\n")
-    print("Poem translated by OpenAI:\n", translate_poem_openai("homme"), "\n")
+    print("Poem translated by Google Translate:\n", translate_poem_google(poem_fr), "\n")
+    print("Poem translated by DeepL:\n", translate_poem_deepl(poem_fr), "\n")
+    print("Poem translated by OpenAI:\n", translate_poem_openai(poem_fr), "\n")
 
 def generate_translations(poem_fr, poem_en):
     # generate translations of poem from French to English

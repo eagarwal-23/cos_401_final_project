@@ -1,5 +1,4 @@
 import nltk
-nltk.download('punkt')
 import pandas as pd
 import numpy as np
 import spacy
@@ -11,8 +10,11 @@ import Poem_Emotions
 import sys
 # TODO: change punctuation removal to regex method
 # constants
-nlp_en = spacy.load("en_core_web_trf")
-nlp_fr = spacy.load("fr_dep_news_trf")
+# nlp_en = spacy.load("en_core_web_trf")
+# nlp_fr = spacy.load("fr_dep_news_trf")
+
+nlp_en = spacy.load("en_core_web_md")
+nlp_fr = spacy.load("fr_core_news_md")
 
 emotions = ['joy', 'fear', 'sadness', 'anger', 'surprise', 'disgust']
 punctuation = string.punctuation
@@ -22,7 +24,8 @@ def main():
         poem_fr = f.read()
     with open(sys.argv[2], 'r') as f:
         poem_en = f.read()
-    calc_emotional_similarity(poem_fr, poem_en)
+    a, b, c = calc_emotional_similarity(poem_fr, poem_en)
+    print(b.emotions_ranked(), b.polarity())
 
 # calculate emotional similarity between french poem and input english translation
 def calc_emotional_similarity(poem_fr, poem_en):
@@ -116,7 +119,7 @@ def fr_poem_emotions(poem_fr, cleaned_poem_fr, feel_df):
                             emotions_dict[column] += 1
                         else:
                             emotions_dict[column] = 1
-    poem_emotions = Poem_Emotions.Poem_Emotions('FR', poem_fr, poem_polarity, poem_emotions_vector, emotions_dict)
+    poem_emotions = Poem_Emotions.Poem_Emotions('FR', poem_fr, poem_polarity/len(cleaned_poem_fr), poem_emotions_vector, emotions_dict)
     return poem_emotions
 
 # TODO: lemmatize
@@ -184,7 +187,7 @@ def en_poem_emotions(poem_en, cleaned_poem_en, nrc_df):
                         else:
                             emotions_dict[column] = 1
     
-    poem_emotions = Poem_Emotions.Poem_Emotions('EN', poem_en, poem_polarity, poem_emotions_vector, emotions_dict)
+    poem_emotions = Poem_Emotions.Poem_Emotions('EN', poem_en, poem_polarity/len(cleaned_poem_en), poem_emotions_vector, emotions_dict)
     return poem_emotions
 
 if __name__ == '__main__':
