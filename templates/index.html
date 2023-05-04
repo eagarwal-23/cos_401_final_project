@@ -2,14 +2,59 @@
 <html>
 <head>
 	<title>Pardon My French: A French to English Poem Translator</title>
+	<style>
+    {
+        box-sizing: border-box;
+    }
+    /* Set additional styling options for the columns*/
+    .column {
+   		display: inline-block;
+		vertical-align: top;
+    }
+
+    .row:after {
+		content: "";
+		display: table;
+		clear: both;
+		align-items: center;
+		justify-content: center;
+    }
+
+    </style>
 </head>
 <body>
+	<!-- title of page -->
 	<h1><center>Pardon My French: A French to English Poem Translator</center></h1>
 	<h3><center>with Semantic, Syntactic, and Emotional Similarity Scores</center></h3>
-	<form action="/translate" method="post"><center>
-		<label for="poem">Enter your poem:</label><br>
-		<textarea id="poem" name="poem"></textarea><br>
-		<input type="submit" value="Translate and Score Translations">
-	</center></form>
+
+	<!-- translator description -->
+	<p style="padding-left: 300px; padding-right: 300px; text-align:center"> 
+		This French to English poem translator takes in a French poem and your English translation of the poem, translates the French poem into English using DeepL, OpenAI, and Google Translate, and calculates the semantic, syntactic, and emotional similarity between the French poem and all four of these translations. 
+	</p>
+
+
+	<div style="padding-bottom: 10px;"></div>
+
+	<!-- enter poems blocks -->
+	<center>
+		<form action="/translate" method="post">
+		  <div class="row">
+		    <div class="column" style="width: 35%;">
+		      <label for="og_poem">Enter the original French poem:</label><br>
+		      <textarea id="og_poem" name="og_poem" rows="15" cols="50"></textarea><br>
+		    </div>
+		    <div class="column" style="width: 35%;">
+		      <label for="human_trans">Enter your English translation:</label><br>
+		      <textarea id="human_trans" name="human_trans" rows="15" cols="50"></textarea><br>
+		    </div>
+		  </div>
+		  <div style="padding-bottom: 30px;"></div>
+		  <div style="text-align:center">
+		    <button type="submit">Score Translations</button>
+		  </div>
+		</form>
+	</center>
+
+	
 </body>
 </html>

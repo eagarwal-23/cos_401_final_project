@@ -8,12 +8,12 @@ def index():
 
 @app.route('/translate', methods=['POST'])
 def translate():
-    poem = request.form['poem']
-    og_poem = poem
+    og_poem = request.form['og_poem']
+    human_trans = request.form['human_trans']
     # translation function
-    poem1 = poem
-    poem2 = poem
-    poem3 = poem
+    poem1 = og_poem
+    poem2 = human_trans
+    poem3 = og_poem
     trans_poem = [poem1, poem2, poem3]
 
     # semantic score for each translation
@@ -25,7 +25,7 @@ def translate():
     # emotional score for each translation
     emotion = [len(poem1)+1, len(poem2)+2, len(poem3)+3]
 
-    return render_template('result.html', og_poem = og_poem, translation=trans_poem, semantic = semantic, struct = struct, emotion = emotion)
+    return render_template('result.html', og_poem = og_poem, human_trans = human_trans, translation=trans_poem, semantic = semantic, struct = struct, emotion = emotion)
 
 if __name__ == '__main__':
     app.run(debug=True)
