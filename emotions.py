@@ -9,8 +9,8 @@ import Poem_Emotions
 import sys
 
 # constants
-nlp_en = spacy.load("en_core_web_trf")
-nlp_fr = spacy.load("fr_dep_news_trf")
+nlp_en = spacy.load("en_core_web_lg")
+nlp_fr = spacy.load("fr_core_news_lg")
 
 emotions = ['joy', 'fear', 'sadness', 'anger', 'surprise', 'disgust']
 punctuation = string.punctuation
@@ -22,6 +22,7 @@ def main():
         poem_en = f.read()
     calc_emotional_similarity(poem_fr, poem_en)
 
+# calculate emotional similarity between french poem and input english translation
 def calc_emotional_similarity(poem_fr, poem_en):
     # read in and preprocess emotion lexicons
     feel_df = pd.read_csv('FEEL.csv', sep = ";")
