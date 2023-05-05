@@ -12,8 +12,11 @@ import sys
 
 # for lexical complexity
 
-nlp_en = spacy.load("en_core_web_trf")
-nlp_fr = spacy.load("fr_dep_news_trf")
+# nlp_en = spacy.load("en_core_web_trf")
+# nlp_fr = spacy.load("fr_dep_news_trf")
+
+nlp_en = spacy.load("en_core_web_md")
+nlp_fr = spacy.load("fr_core_news_md")
 
 def main():
     
@@ -21,17 +24,22 @@ def main():
         poem_fr = f.read()
     with open(sys.argv[2], 'r') as f:
         poem_en = f.read()
+    
+    print(calculate_lexical_similarity(poem_fr, poem_en))
 
-    print(en_fr_ratio(mean_syllables_poem, poem_en, poem_fr))
-    print(en_fr_ratio(mean_words_per_line, poem_en, poem_fr))
-    print(en_fr_ratio(ttr, poem_en, poem_fr))
-    print(en_fr_ratio(abstract_concrete_ratio, poem_en, poem_fr))
-    print(en_fr_ratio(lexical_density, poem_en, poem_fr))
+def calculate_lexical_similarity(poem_fr, poem_en):
+    a = (en_fr_diff_normalized(mean_syllables_poem, poem_en, poem_fr))
+    b = (en_fr_diff_normalized(mean_words_per_line, poem_en, poem_fr))
+    c = (en_fr_diff_normalized(ttr, poem_en, poem_fr))
+    d = (en_fr_diff_normalized(abstract_concrete_ratio, poem_en, poem_fr))
+    e = (en_fr_diff_normalized(lexical_density, poem_en, poem_fr))
+    return 0.99 - ((a * 0.11 + b * 0.11 + c * 0.11 + d * 0.33 + e * 0.33)/0.99)
 
-# number of syllables on average
-
-def en_fr_ratio(func, poem_en, poem_fr):
-    return func(poem_en, lang = 'en')/func(poem_fr, lang = 'fr')
+def en_fr_diff_normalized(func, poem_en, poem_fr):
+    if func(poem_fr, lang = 'fr') != 0:
+        return abs(func(poem_en, lang = 'en') - func(poem_fr, lang = 'fr'))/(func(poem_fr, lang = 'fr'))
+    else: 
+        return abs(func(poem_en, lang = 'en') - func(poem_fr, lang = 'fr'))
 
 def mean_syllables_poem(poem, lang = 'en'):
     dic_fr = pyphen.Pyphen(lang='fr_FR')
