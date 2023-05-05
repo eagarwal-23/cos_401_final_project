@@ -51,7 +51,22 @@
 		      <textarea id="human_trans" name="human_trans" rows="15" cols="50"></textarea><br>
 		    </div>
 		  </div>
-		  <div style="padding-bottom: 30px;"></div>
+		  <div style="padding-bottom: 20px;"></div>
+		  <table>
+			  <tr>
+			    <td>Choose the similarity score that is most important to you: </td>
+			    <td>
+			      <select name="preference">
+			      	<option value="no_pref">No Preference</option>
+			        <option value="sem">Semantic</option>
+			        <option value="syn">Syntactic</option>
+			        <option value="emote">Emotional</option>
+			        <option value="lex">Lexical</option>
+			      </select>
+			    </td>
+			  </tr>
+			</table>
+			<div style="padding-bottom: 20px;"></div>
 		  <div style="text-align:center">
 		    <button type="submit">Score Translations</button>
 		  </div>
