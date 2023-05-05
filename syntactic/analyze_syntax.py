@@ -18,8 +18,10 @@ PHONETIC_RATIO = 0.5
 
 # These are the deeper pipelines. If performance becomes an issue we can switch
 # to more optimized ones.
-nlp_en = spacy.load("en_core_web_trf")
-nlp_fr = spacy.load("fr_dep_news_trf")
+# nlp_en = spacy.load("en_core_web_trf")
+# nlp_fr = spacy.load("fr_dep_news_trf")
+nlp_fr = spacy.load("fr_core_news_md")
+nlp_en = spacy.load("en_core_web_md")
 
 class MyNode(object):
 
@@ -170,5 +172,4 @@ def calculate_syntactic_similarity(poem_fr, poem_en):
 
 src_fr = "Sous le pont Mirabeau coule la Seine Et nos amours Faut il qu il m en souvienne La joie venait toujours après la peine"
 src_en = "Under the Mirabeau Bridge there flows the Seine And our loves recall how then After each sorrow joy came back again"
-
 print(calculate_syntactic_similarity(src_fr, src_en))
