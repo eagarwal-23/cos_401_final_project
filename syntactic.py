@@ -63,6 +63,10 @@ def parse_similarity(src_fr, src_en):
     satze_fr = re.split('\n|\.', src_fr)
     satze_en = re.split('\n|\.', src_en)
 
+    # Total number of words over all sentences.
+    doc_fr_l = 0
+    doc_en_l = 0
+
     # POS tag every sentence, then compare the tag structure.
     for s_en, s_fr in zip(satze_en, satze_fr):
         doc_en = nlp_en(s_en)
@@ -75,8 +79,10 @@ def parse_similarity(src_fr, src_en):
             t_fr = to_zss_tree(sent.root.children, MyNode(sent.root.pos_))
         # Compute the Zhang-Shasha edit distance:
         zss_dist = zss_dist + simple_distance(t_fr, t_en)
+        doc_fr_l = doc_fr_l + len(doc_fr)
+        doc_en_l = doc_en_l + len(doc_en)
 
-    return 1-(zss_dist / max(len(doc_en), len(doc_fr)))
+    return 1 - (zss_dist / (doc_fr_l + doc_en_l))
 
 ########## PHONEME ANALYSIS ##########
 
@@ -128,6 +134,7 @@ def g2p_fr(src_fr):
     # First strip of all punctuation symbols.
     # TODO Should add special weight to punctuation.
     src_stripped = src_fr.translate(str.maketrans('', '', string.punctuation))
+    src_stripped = src_stripped.translate(str.maketrans('', '', '’'))
     arpas = transducer(src_stripped).output_string
     arpas = arpas.split()
     # Vectorize the occurrences of each phoneme.
@@ -144,6 +151,7 @@ def g2p_en(src_en):
     # First strip of all punctuation symbols.
     # TODO Should add special weight to punctuation.
     src_stripped = src_en.translate(str.maketrans('', '', string.punctuation))
+    src_stripped = src_stripped.translate(str.maketrans('', '', '’'))
     arpas = g2p(src_stripped)
     arpas_s = ' '.join(arpas)
     # Remove any stressor symbols.
@@ -170,6 +178,10 @@ def calculate_syntactic_similarity(poem_fr, poem_en):
 
 ######### TESTING #########
 
-src_fr = "Sous le pont Mirabeau coule la Seine Et nos amours Faut il qu il m en souvienne La joie venait toujours après la peine"
-src_en = "Under the Mirabeau Bridge there flows the Seine And our loves recall how then After each sorrow joy came back again"
+f = open("poem1.txt", "r")
+src_fr = f.read()
+f = open("poem1_en.txt", "r")
+src_en = f.read()
+# src_fr = "Sous le pont Mirabeau coule la Seine Et nos amours Faut-il qu'il m en souvienne La joie venait toujours après la peine"
+# src_en = "Under the Mirabeau Bridge there flows the Seine And our loves recall how then After each sorrow joy came back again"
 print(calculate_syntactic_similarity(src_fr, src_en))
