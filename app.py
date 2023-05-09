@@ -25,8 +25,8 @@ from syntactic import calculate_syntactic_similarity
 app = Flask(__name__)
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def page1():
+    return render_template('page1.html')
 
 @app.route('/translate', methods=['POST'])
 def translate():
@@ -61,18 +61,18 @@ def translate():
     ### actual
     # semantic score for each translation
     for i in range(4):
-        semantic[i] = round(calculate_semantic_similarity(og_poem, trans_poem[i]), 5)
+        semantic[i] = round(calculate_semantic_similarity(og_poem, trans_poem[i]), 4)
 
     # structural score for each translation
     for i in range(4):
-        struct[i] = round(calculate_syntactic_similarity(og_poem, trans_poem[i]), 5)
+        struct[i] = round(calculate_syntactic_similarity(og_poem, trans_poem[i]), 4)
 
     # emotional score for each translation
     emo_ranked = [{},{},{},{}]
     for i in range(4):
         emo = calc_emotional_similarity(og_poem, trans_poem[i])
-        emotion[i] = round(emo[0], 5)
-        polarity[i] = round(emo[2].polarity(), 2)
+        emotion[i] = round(emo[0], 4)
+        polarity[i] = round(emo[2].polarity(), 4)
         emo_ranked[i] = emo[2].emotions_ranked()
     # round all values in ranked dictionaries
     for i in range(len(emo_ranked)):
@@ -80,11 +80,11 @@ def translate():
             emo_ranked[i][key] = round(emo_ranked[i][key], 2)
 
     #emotional score for og french poem
-    og_poem_emotions = [og_poem, round(emo[1].polarity(), 5), emo[1].emotions_ranked()]
+    og_poem_emotions = [og_poem, round(emo[1].polarity(), 4), emo[1].emotions_ranked()]
 
     # emotional score for each translation
     for i in range(4):
-        lexical[i] = abs(round(calculate_lexical_similarity(og_poem, trans_poem[i]), 5))
+        lexical[i] = abs(round(calculate_lexical_similarity(og_poem, trans_poem[i]), 4))
 
     # handle preference
     prefs = ["No Preference", "Semantic", "Syntactic", "Emotional", "Lexical"]
@@ -95,7 +95,7 @@ def translate():
     elif (pref==prefs[4]): pref = lexical.index(max(lexical))
     print(pref)
 
-    return render_template('result.html', og_poem = og_poem_emotions, human_trans = human_trans, 
+    return render_template('page2.html', og_poem = og_poem_emotions, human_trans = human_trans, 
         translation=trans_poem, semantic = semantic, struct = struct, emotion = emotion, lexical = lexical,
         emo_ranked = emo_ranked, polarity = polarity, pref = pref, dropdown_option = dropdown_option, prefs = prefs)
 
