@@ -7,13 +7,33 @@
         box-sizing: border-box;
     }
     /* Set additional styling options for the columns*/
-    .result-column {
+    .result-column1 {
+    display: inline-block;
+    width: 24%;
+    vertical-align: top;
+    }
+
+    .result-column2 {
     display: inline-block;
     width: 24%;
     vertical-align: top;
     }
 
     .result-row:after {
+    content: "";
+    display: table;
+    clear: both;
+    align-items: center;
+    justify-content: center;
+    }
+
+    .inner-column {
+    display: inline-block;
+    width: 45%;
+    vertical-align: top;
+    }
+
+    .inner-row:after {
     content: "";
     display: table;
     clear: both;
@@ -38,11 +58,14 @@
 <body>
 	 <!-- title of page -->
     <h1><center>Pardon My French: A French to English Poem Translator</center></h1>
-    <h3><center>with Semantic, Syntactic, and Emotional Similarity Scores</center></h3>
+    <h3><center>with Semantic, Syntactic, Emotional, and Lexical Similarity Scores</center></h3>
 
     <!-- translator description -->
     <p style="padding-left: 300px; padding-right: 300px; text-align:center"> 
-        This French to English poem translator takes in a French poem and your English translation of the poem, translates the French poem into English using DeepL, OpenAI, and Google Translate, and calculates the semantic, syntactic, and emotional similarity between the French poem and all four of these translations. 
+        This French to English poem translator takes in a French poem and your English translation of the poem, translates the French poem into English using DeepL, OpenAI, and Google Translate, and calculates the semantic, syntactic, emotional, and lexical similarity between the French poem and all four of these translations.
+    </p>
+    <p style="padding-left: 300px; padding-right: 300px; text-align:center"> 
+        Note that similarity calculations may take a few minutes.
     </p>
 
 
@@ -54,63 +77,285 @@
           <div class="input-row">
             <div class="input-column" style="width: 35%;">
               <label for="og_poem">Enter the original French poem:</label><br>
-              <textarea id="og_poem" name="og_poem" rows="15" cols="50">{{ og_poem }}</textarea><br>
+              <textarea id="og_poem" name="og_poem" rows="15" cols="50">{{ og_poem[0] }}</textarea><br>
             </div>
             <div class="input-column" style="width: 35%;">
               <label for="human_trans">Enter your English translation:</label><br>
-              <textarea id="human_trans" name="human_trans" rows="15" cols="50">{{ translation[0] }}</textarea><br>
+              <textarea id="human_trans" name="human_trans" rows="15" cols="50">{{ human_trans }}</textarea><br>
             </div>
           </div>
-          <div style="padding-bottom: 30px;"></div>
+          <div style="padding-bottom: 20px;"></div>
+          <table>
+              <tr>
+                <td>Choose the similarity score that is most important to you: </td>
+                <td>
+                  <select name="preference">
+                    {% for option in prefs %}
+                        {% if option == dropdown_option %}
+                            <option value="{{ option }}" selected>{{ option }}</option>
+                        {% else %}
+                            <option value="{{ option }}">{{ option }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    <!-- <option value="no_pref" {% if selected_option == "no_pref" %} selected {% endif %}>No Preference</option>
+                    <option value="sem">Semantic</option>
+                    <option value="syn">Syntactic</option>
+                    <option value="emote">Emotional</option>
+                    <option value="lex">Lexical</option> -->
+                  </select>
+                </td>
+              </tr>
+            </table>
+            <div style="padding-bottom: 20px;"></div>
           <div style="text-align:center">
             <button type="submit">Score Translations</button>
           </div>
         </form>
     </center>
 
-     <div style="padding-bottom: 30px;"></div>
+     <div style="padding-bottom: 20px;"></div>
 
 	<!-- print poem translations -->
 	<center>
+        <!-- row 1: translations -->
         <div class="result-row">
-            <div class="result-column" style="background-color:#FFB695;">
+
+            <!-- 1. human translation -->
+            <div class="result-column1" style="background-color:#CAE3E8;">
                 <h2>Human Translation</h2>
-                <p>{{ translation[0] }}</p>
-                <p> </p>
-                <p><b>Semantic Score: </b> {{ semantic[0] }}</p>
-    			<p><b>Syntactic Score: </b> {{ struct[0] }}</p>
-    			<p><b>Emotional Score: </b> {{ emotion[0] }}</p>
-                <p><b>Lexical Score: </b> {{ lexical[1] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:center">{{ translation[0]|safe }}</p>
             </div>
-            <div class="result-column" style="background-color:#96D1CD;">
-                <h2>Google Translation</h2>
-                <p>{{ translation[1] }}</p>
-                <p> </p>
-                <p><b>Semantic Score: </b> {{ semantic[1] }}</p>
-    			<p><b>Syntactic Score: </b> {{ struct[1] }}</p>
-    			<p><b>Emotional Score: </b> {{ emotion[1] }}</p>
-                <p><b>Lexical Score: </b> {{ lexical[1] }}</p>
+            
+            <!-- 2. google translate -->
+            <div class="result-column1" style="background-color:#96D1CD;">
+                <h2>Google Translate Translation</h2>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:center">{{ translation[1]|safe }}</p>
             </div>
-            <div class="result-column" style="background-color:#96D1CD;">
+
+            <!-- 3. deepL -->
+            <div class="result-column1" style="background-color:#CAE3E8;">
                 <h2>DeepL Translation</h2>
-                <p>{{ translation[2] }}</p>
-                <p> </p>
-                <p><b>Semantic Score: </b> {{ semantic[2] }}</p>
-    			<p><b>Syntactic Score: </b> {{ struct[2] }}</p>
-    			<p><b>Emotional Score: </b> {{ emotion[2] }}</p>
-                <p><b>Lexical Score: </b> {{ lexical[2] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:center">{{ translation[2]|safe }}</p>
             </div>
-            <div class="result-column" style="background-color:#FFB695;">
+
+            <!-- 4. openAI -->
+            <div class="result-column1" style="background-color:#96D1CD;">
                 <h2>OpenAI Translation</h2>
-                <p>{{ translation[3] }}</p>
-                <p> </p>
-                <p><b>Semantic Score: </b> {{ semantic[3] }}</p>
-                <p><b>Syntactic Score: </b> {{ struct[3] }}</p>
-                <p><b>Emotional Score: </b> {{ emotion[3] }}</p>
-                <p><b>Lexical Score: </b> {{ lexical[3] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:center">{{ translation[3]|safe }}</p>
             </div>
         </div>
+
+        <!-- row 2: scores -->
+        <div class="result-row">
+
+            <!-- 1. human translation -->
+            <div class="result-column2" style="background-color:#CAE3E8;">
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Semantic Similarity Score: </b> {{ semantic[0] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Syntactic Similarity Score: </b> {{ struct[0] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Emotional Similarity Score: </b> {{ emotion[0] }}</p>
+                <div style="float: left; padding-left: 30px">
+                                <button onclick="toggleContent1()">Learn more...</button>
+                             </div><br>
+                <div id="content1" style="display: none; padding-left: 30px; padding-right: 20px; text-align:left">
+                    <p> The original French poem has a polarity score of <b>{{ og_poem[1] }}</b> and this English translation has a polarity score of <b>{{polarity[0]}}</b>.</p>
+                    <p> The original French poem (left) and this English translation (right) have the following rankings in terms of emotional presence:
+                    <div class="inner-row">
+                        <div class="inner-column">
+                            <ol>
+                            {% for key, value in og_poem[2].items() %}
+                                <li><b>{{ key }}:</b> {{ value }}</li>
+                            {% endfor %}
+                            </ol>
+                        </div>
+                        <div class="inner-column">
+                            <ol>
+                            {% for key, value in emo_ranked[0].items() %}
+                                <li><b>{{ key }}:</b> {{ value }}</li>
+                            {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                    </p>
+
+                </div>
+                <script>
+                    function toggleContent1() {
+                        var content = document.getElementById("content1");
+                        if (content.style.display === "none") {
+                            content.style.display = "block";
+                        } else {
+                            content.style.display = "none";
+                        }
+                    }
+                </script>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Lexical Similarity Score: </b> {{ lexical[0] }}</p>
+            </div>
+            
+            <!-- 2. google translate -->
+            <div class="result-column2" style="background-color:#96D1CD;">
+                 <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Semantic Similarity Score: </b> {{ semantic[1] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Syntactic Similarity Score: </b> {{ struct[1] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Emotional Similarity Score: </b> {{ emotion[1] }}</p>
+                <div style="float: left; padding-left: 30px">
+                <button onclick="toggleContent2()">Learn more...</button>
+             </div>
+             <br>
+                <div id="content2" style="display: none; padding-left: 30px; padding-right: 20px; text-align:left">
+                    <p> The original French poem has a polarity score of <b>{{ og_poem[1] }}</b> and this English translation has a polarity score of <b>{{polarity[1]}}</b>.</p>
+                    <p> The original French poem (left) and this English translation (right) have the following rankings in terms of emotional presence:
+                    <div class="inner-row">
+                        <div class="inner-column">
+                            <ol>
+                            {% for key, value in og_poem[2].items() %}
+                                <li><b>{{ key }}:</b> {{ value }}</li>
+                            {% endfor %}
+                            </ol>
+                        </div>
+                        <div class="inner-column">
+                            <ol>
+                            {% for key, value in emo_ranked[1].items() %}
+                                <li><b>{{ key }}:</b> {{ value }}</li>
+                            {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                    </p>
+                </div>
+                <script>
+                    function toggleContent2() {
+                        var content = document.getElementById("content2");
+                        if (content.style.display === "none") {
+                            content.style.display = "block";
+                        } else {
+                            content.style.display = "none";
+                        }
+                    }
+                </script>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Lexical Similarity Score: </b> {{ lexical[1] }}</p>
+            </div>
+
+            <!-- 3. deepL -->
+            <div class="result-column2" style="background-color:#CAE3E8;">
+                 <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Semantic Similarity Score: </b> {{ semantic[2] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Syntactic Similarity Score: </b> {{ struct[2] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Emotional Similarity Score: </b> {{ emotion[2] }}</p>
+                <div style="float: left; padding-left: 30px">
+                <button onclick="toggleContent3()">Learn more...</button>
+             </div><br>
+            <div id="content3" style="display: none; padding-left: 30px; padding-right: 20px; text-align:left">
+                <p> The original French poem has a polarity score of <b>{{ og_poem[1] }}</b> and this English translation has a polarity score of <b>{{polarity[2]}}</b>.</p>
+                <p> The original French poem (left) and this English translation (right) have the following rankings in terms of emotional presence:
+                <div class="inner-row">
+                    <div class="inner-column">
+                        <ol>
+                        {% for key, value in og_poem[2].items() %}
+                            <li><b>{{ key }}:</b> {{ value }}</li>
+                        {% endfor %}
+                        </ol>
+                    </div>
+                    <div class="inner-column">
+                        <ol>
+                        {% for key, value in emo_ranked[2].items() %}
+                            <li><b>{{ key }}:</b> {{ value }}</li>
+                        {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+                </p>
+            </div>
+            <script>
+                function toggleContent3() {
+                    var content = document.getElementById("content3");
+                    if (content.style.display === "none") {
+                        content.style.display = "block";
+                    } else {
+                        content.style.display = "none";
+                    }
+                }
+            </script>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Lexical Similarity Score: </b> {{ lexical[2] }}</p>
+            </div>
+
+            <!-- 4. openAI -->
+            <div class="result-column2" style="background-color:#96D1CD;">
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Semantic Similarity Score: </b> {{ semantic[3] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Syntactic Similarity Score: </b> {{ struct[3] }}</p>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Emotional Similarity Score: </b> {{ emotion[3] }}</p>
+                <div style="float: left; padding-left: 30px">
+                <button onclick="toggleContent4()">Learn more...</button>
+             </div><br>
+                <div id="content4" style="display: none; padding-left: 30px; padding-right: 20px; text-align:left">
+                    <p> The original French poem has a polarity score of <b>{{ og_poem[1] }}</b> and this English translation has a polarity score of <b>{{polarity[3]}}</b>.</p>
+                    <p> The original French poem (left) and this English translation (right) have the following rankings in terms of emotional presence:
+                    <div class="inner-row">
+                        <div class="inner-column">
+                            <ol>
+                            {% for key, value in og_poem[2].items() %}
+                                <li><b>{{ key }}:</b> {{ value }}</li>
+                            {% endfor %}
+                            </ol>
+                        </div>
+                        <div class="inner-column">
+                            <ol>
+                            {% for key, value in emo_ranked[3].items() %}
+                                <li><b>{{ key }}:</b> {{ value }}</li>
+                            {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                    </p>
+                </div>
+                <script>
+                    function toggleContent4() {
+                        var content = document.getElementById("content4");
+                        if (content.style.display === "none") {
+                            content.style.display = "block";
+                        } else {
+                            content.style.display = "none";
+                        }
+                    }
+                </script>
+                <p style="padding-left: 20px; padding-right: 20px; text-align:left"><b>Lexical Similarity Score: </b> {{ lexical[3] }}</p>
+            </div>
+        </div>
+        <p>(If a preference was chosen, the translation with the highest corresponding similarity score will appear in orange.)</p>
     </center>
+
+    <!-- make all columns the same height based on the longest first and second row entry -->
+
+    <script>
+        // get all the columns
+        var cols = document.getElementsByClassName("result-column1");
+        var cols2 = document.getElementsByClassName("result-column2");
+        var pref = {{ pref }};
+
+        // set color of column for preference winner
+        if (pref < 4) {
+            cols[pref].style.backgroundColor = '#FFB695'
+            cols2[pref].style.backgroundColor = '#FFB695'
+        }
+        
+
+        // cols[0].style.backgroundColor = '#FFB695'
+
+        // set the initial max height to 0
+        var maxHeight = 0;
+
+        // loop through the columns to find the tallest one
+        for (var i = 0; i < cols.length; i++) {
+          var colHeight = cols[i].offsetHeight;
+          if (colHeight > maxHeight) {
+            maxHeight = colHeight;
+          }
+        }
+
+        // set the height of all the columns to match the tallest one
+        for (var i = 0; i < cols.length; i++) {
+          cols[i].style.height = maxHeight + "px";
+        }
+
+      </script>
 
 </body>
 </html>
+<!-- orange color: FFB695 -->
