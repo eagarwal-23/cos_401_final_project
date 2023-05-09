@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pardon My French: A French to English Poem Translator</title>
+	<style>
+    {
+        box-sizing: border-box;
+    }
+    /* Set additional styling options for the columns*/
+    .column {
+   		display: inline-block;
+		vertical-align: top;
+    }
+
+    .row:after {
+		content: "";
+		display: table;
+		clear: both;
+		align-items: center;
+		justify-content: center;
+    }
+
+    </style>
+</head>
+<body>
+	<!-- title of page -->
+	<h1><center>Pardon My French: A French to English Poem Translator</center></h1>
+	<h3><center>with Semantic, Syntactic, Emotional, and Lexical Similarity Scores</center></h3>
+
+	<!-- translator description -->
+	<p style="padding-left: 300px; padding-right: 300px; text-align:center"> 
+		This French to English poem translator takes in a French poem and your English translation of the poem, translates the French poem into English using DeepL, OpenAI, and Google Translate, and calculates the semantic, syntactic, emotional, and lexical similarity between the French poem and all four of these translations.
+	</p>
+	<p style="padding-left: 300px; padding-right: 300px; text-align:center"> 
+		Note that similarity calculations may take a few minutes.
+	</p>
+
+
+	<div style="padding-bottom: 10px;"></div>
+
+	<!-- enter poems blocks -->
+	<center>
+		<form action="/translate" method="post">
+		  <div class="row">
+		    <div class="column" style="width: 35%;">
+		      <label for="og_poem">Enter the original French poem:</label><br>
+		      <textarea id="og_poem" name="og_poem" rows="15" cols="50"></textarea><br>
+		    </div>
+		    <div class="column" style="width: 35%;">
+		      <label for="human_trans">Enter your English translation:</label><br>
+		      <textarea id="human_trans" name="human_trans" rows="15" cols="50"></textarea><br>
+		    </div>
+		  </div>
+		  <div style="padding-bottom: 20px;"></div>
+		  <table>
+			  <tr>
+			    <td>Choose the similarity score that is most important to you: </td>
+			    <td>
+			      <select name="preference">
+			      	<option value="No Preference">No Preference</option>
+			        <option value="Semantic">Semantic</option>
+			        <option value="Syntactic">Syntactic</option>
+			        <option value="Emotional">Emotional</option>
+			        <option value="Lexical">Lexical</option>
+			      </select>
+			    </td>
+			  </tr>
+			</table>
+			<div style="padding-bottom: 20px;"></div>
+		  <div style="text-align:center">
+		    <button type="submit">Score Translations</button>
+		  </div>
+		</form>
+	</center>
+
+	
+</body>
+</html>
