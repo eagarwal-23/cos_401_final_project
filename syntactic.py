@@ -55,13 +55,14 @@ def to_zss_tree(children, zs_t):
     return zs_t
 
 # Returns 1 minus the Zhang-Shasha edit distance between the parse trees of the 
-# French and English texts, normalized on the number of nodes in the larger tree.
+# French and English texts, normalized on two times the number of nodes in both
+# trees.
 def parse_similarity(src_fr, src_en):
     zss_dist = 0
 
     # Split source on line breaks or full breaks.
-    satze_fr = re.split('\n|\.', src_fr)
-    satze_en = re.split('\n|\.', src_en)
+    satze_fr = list(filter(None, re.split('\n|\.', src_fr)))
+    satze_en = list(filter(None, re.split('\n|\.', src_en)))
 
     # Total number of words over all sentences.
     doc_fr_l = 0
@@ -82,7 +83,7 @@ def parse_similarity(src_fr, src_en):
         doc_fr_l = doc_fr_l + len(doc_fr)
         doc_en_l = doc_en_l + len(doc_en)
 
-    return 1 - (zss_dist / (doc_fr_l + doc_en_l))
+    return 1 - (zss_dist / (2*(doc_fr_l + doc_en_l)))
 
 ########## PHONEME ANALYSIS ##########
 
@@ -178,10 +179,18 @@ def calculate_syntactic_similarity(poem_fr, poem_en):
 
 ######### TESTING #########
 
-f = open("poem1.txt", "r")
-src_fr = f.read()
-f = open("poem1_en.txt", "r")
-src_en = f.read()
+# f = open("poem1.txt", "r")
+# src_fr = f.read()
+# f = open("poem1_en.txt", "r")
+# src_en = f.read()
+
 # src_fr = "Sous le pont Mirabeau coule la Seine Et nos amours Faut-il qu'il m en souvienne La joie venait toujours après la peine"
 # src_en = "Under the Mirabeau Bridge there flows the Seine And our loves recall how then After each sorrow joy came back again"
+src_fr = "L'intelligence avec l'ange, notre primordial souci."
+src_en = "Communicating with the angel, our primordial care."
+src_en2 = "Intelligence with the angel, our prime concern."
+src_en3 = "Intelligence with the angel, our primordial concern."
+
 print(calculate_syntactic_similarity(src_fr, src_en))
+print(calculate_syntactic_similarity(src_fr, src_en2))
+print(calculate_syntactic_similarity(src_fr, src_en3))
