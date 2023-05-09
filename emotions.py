@@ -27,7 +27,8 @@ def main():
     with open(sys.argv[2], 'r') as f:
         poem_en = f.read()
     a, b, c = calc_emotional_similarity(poem_fr, poem_en)
-    print(b.emotions_ranked(), b.polarity())
+    print("french", b.emotions_ranked(), b.polarity())
+    print("english", c.emotions_ranked(), c.polarity())
 
 # calculate emotional similarity between french poem and input english translation
 def calc_emotional_similarity(poem_fr, poem_en):
@@ -48,10 +49,6 @@ def calc_emotional_similarity(poem_fr, poem_en):
     # get emotions for both poems
     poem_fr_emotions = fr_poem_emotions(poem_fr, cleaned_poem_fr, feel_df_preprocessed)
     poem_en_emotions = en_poem_emotions(poem_en, cleaned_poem_en, nrc_df_proprocessed)
-
-    print(poem_fr_emotions)
-    print(poem_en_emotions)
-    print(poem_fr_emotions.calc_dist(poem_en_emotions))
 
     return [poem_fr_emotions.calc_dist(poem_en_emotions), poem_fr_emotions, poem_en_emotions]
 

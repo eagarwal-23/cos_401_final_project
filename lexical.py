@@ -24,23 +24,27 @@ def main():
         poem_fr = f.read()
     with open(sys.argv[2], 'r') as f:
         poem_en = f.read()
-    
-    print(calculate_lexical_similarity(poem_fr, poem_en))
 
+    print(calculate_lexical_similarity(poem_fr, poem_en))
+    
+# calculate lexical similarity
 def calculate_lexical_similarity(poem_fr, poem_en):
     a = (en_fr_diff_normalized(mean_syllables_poem, poem_en, poem_fr))
     b = (en_fr_diff_normalized(mean_words_per_line, poem_en, poem_fr))
     c = (en_fr_diff_normalized(ttr, poem_en, poem_fr))
     d = (en_fr_diff_normalized(abstract_concrete_ratio, poem_en, poem_fr))
     e = (en_fr_diff_normalized(lexical_density, poem_en, poem_fr))
+
     return 0.99 - ((a * 0.11 + b * 0.11 + c * 0.11 + d * 0.33 + e * 0.33)/0.99)
 
+# calculate normalized diff given a function, an english poem, and a french poem
 def en_fr_diff_normalized(func, poem_en, poem_fr):
     if func(poem_fr, lang = 'fr') != 0:
         return abs(func(poem_en, lang = 'en') - func(poem_fr, lang = 'fr'))/(func(poem_fr, lang = 'fr'))
     else: 
         return abs(func(poem_en, lang = 'en') - func(poem_fr, lang = 'fr'))
 
+# calculate average number of syllables per word for a given poem
 def mean_syllables_poem(poem, lang = 'en'):
     dic_fr = pyphen.Pyphen(lang='fr_FR')
     dic_en = pyphen.Pyphen(lang='en_GB')
@@ -57,7 +61,8 @@ def mean_syllables_poem(poem, lang = 'en'):
     
     return syllables/len(poem_tokens)
 
-# number of words per line
+# calculate average number of words per line (defined by linebreaks) 
+# for a given poem
 def mean_words_per_line(poem, lang = 'en'):
     num_lines = len(poem.split("\n"))
 
@@ -69,7 +74,7 @@ def mean_words_per_line(poem, lang = 'en'):
 
     return len(poem_tokens)/(num_lines)
 
-# type-token ratio
+# type-token ratio (# of unique words/total # of words)
 def ttr(poem, lang = 'en'):
     poem = re.sub(r'[^\w]', ' ', poem)
     if lang == 'fr':
@@ -79,13 +84,17 @@ def ttr(poem, lang = 'en'):
 
     return len(Counter(poem_tokens))/len(poem_tokens)
 
+# referenced code from:
 # https://en.wikipedia.org/wiki/Lesk_algorithm
 # https://github.com/Akirato/Lesk-Algorithm/blob/master/leskAlgorithm.py
+
+# implementation of Lesk algorithm (as described above) for French
 def lesk_fr(sentence_tokens, word, synsets):
     max_overlap = 0
     best_sense = synsets[0]
     sentence_tokens = set(sentence_tokens)
 
+    # for every possible meaning of a given word
     for sense in synsets:
         # add definition and example for sense
         signature = set(sense.definition().split())
@@ -104,18 +113,24 @@ def lesk_fr(sentence_tokens, word, synsets):
 
     return best_sense
 
+# single method to calculate abstract-concrete ratio given a poem and a language
 def abstract_concrete_ratio(poem, lang = 'en'):
     if lang == 'en':
         return abstract_concrete_ratio_en(poem)
     else:
         return abstract_concrete_ratio_fr(poem)
 
+# calculate abstract concrete ratio for a french poem
 def abstract_concrete_ratio_fr(poem):
+    # nouns categorized as abstract
     lexical_categories_abs = ['noun.attribute', 'noun.cognition', 'noun.communication', 'noun.event', 'noun.feeling', 'noun.group', 'noun.location', 'noun.motive', 'noun.phenomenon', 'noun.possession', 'noun.quantity', 'noun.relation', 'noun.state', 'noun.time']
+    
+    # nouns categorized as concrete
     lexical_categories_con = ['noun.animal', 'noun.person', 'noun.artifact', 'noun.body', 'noun.food', 'noun.plant', 'noun.shape', 'noun.substance', 'noun.object']
     doc = nlp_fr(poem)
-    translator = googletrans.Translator()
 
+    # translate poem to english and tokenize for use in lesk algorithm
+    translator = googletrans.Translator()
     poem_en = translator.translate(poem).text
     tokens = word_tokenize(poem_en, language= "english")
 
@@ -134,9 +149,12 @@ def abstract_concrete_ratio_fr(poem):
                         con += 1
     return (abs/con)
 
+# calculate abstract concrete ratio for an english poem
 def abstract_concrete_ratio_en(poem):
-    # TODO: confirm categorization
+    # nouns categorized as abstract
     lexical_categories_abs = ['noun.attribute', 'noun.cognition', 'noun.communication', 'noun.event', 'noun.feeling', 'noun.group', 'noun.location', 'noun.motive', 'noun.phenomenon', 'noun.possession', 'noun.quantity', 'noun.relation', 'noun.state', 'noun.time']
+    
+    # nouns categorized as concrete
     lexical_categories_con = ['noun.animal', 'noun.person', 'noun.artifact', 'noun.body', 'noun.food', 'noun.plant', 'noun.shape', 'noun.substance', 'noun.object']
     noun_pos_tags = ['NN', 'NNS', 'NNP', 'NNPS']
     doc = nlp_en(poem)
@@ -158,10 +176,12 @@ def abstract_concrete_ratio_en(poem):
                         abs += 1
                     elif synset.lexname() in lexical_categories_con:
                         con += 1
-                        
     return (abs/con)
 
+# compute lexical density given a poem and a language (ratio of content words
+# to total # of words in the poem)
 def lexical_density(poem, lang = 'en'):
+    # list of content words
     lexical = ['NOUN', 'VERB', 'ADV', 'ADJ']
 
     lexical_count = 0
