@@ -179,18 +179,9 @@ def calculate_syntactic_similarity(poem_fr, poem_en):
 
 ######### TESTING #########
 
-# f = open("poem1.txt", "r")
-# src_fr = f.read()
-# f = open("poem1_en.txt", "r")
-# src_en = f.read()
-
-# src_fr = "Sous le pont Mirabeau coule la Seine Et nos amours Faut-il qu'il m en souvienne La joie venait toujours après la peine"
-# src_en = "Under the Mirabeau Bridge there flows the Seine And our loves recall how then After each sorrow joy came back again"
-src_fr = "L'intelligence avec l'ange, notre primordial souci."
-src_en = "Communicating with the angel, our primordial care."
-src_en2 = "Intelligence with the angel, our prime concern."
-src_en3 = "Intelligence with the angel, our primordial concern."
-
-print(calculate_syntactic_similarity(src_fr, src_en))
-print(calculate_syntactic_similarity(src_fr, src_en2))
-print(calculate_syntactic_similarity(src_fr, src_en3))
+def main():
+    with open(sys.argv[1], 'r') as f:
+        src_fr = f.read()
+    with open(sys.argv[2], 'r') as f:
+        src_en = f.read()
+    print(calculate_syntactic_similarity(src_fr, src_en))

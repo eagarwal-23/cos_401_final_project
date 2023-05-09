@@ -1,6 +1,21 @@
-# COS 401 Final Project: Translating French Poetry
+# COS 401 Final Project
+## Authors: Eesha Agarwal, Kaleb Areda, Addele Hargenrader, Hyunsung Yun
 
-Need two arguments to run translators, with the first being the poem to translate,
-and the second being a human translation of the same for comparison:
+## Directory Structure
+
+app.py implements the frontend interface for each of our metrics, which are
+implemented separately in emotions.py, lexical.py, semantic.py, and syntactic.py.
+
+Each of the backend metrics can be run separately by supplying two arguments,
+one for the original (in French) and one for the translation.
+
+data/ contains the poems that were used for analysis. FEEL.csv and nrc.txt are
+databases that we used to do implement the metrics.
+
+## Running the Backend Driver
+
+translators.py drives all four backends while also generating machine translations.
+Need two arguments to run translators.py: the first is the poem to translate,
+and the second is a translation for comparison.
 
 `python translators.py poem1.txt poem1_en.txt`
